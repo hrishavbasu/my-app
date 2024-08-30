@@ -1,36 +1,20 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
-import { Header } from "@/components/header";
+import { ClientLayout } from "@/components/ClientLayout";
+import { metadata } from "./metadata";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
-  metadataBase: new URL(`https://${process.env.VERCEL_URL}`),
-  title: {
-    default: 'Adventure',
-    template: `%s - Adventure`
-  },
-  description: 'Find different people who like to travel',
-  icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png'
-  }
-}
+export { metadata };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-      <Providers attribute="class" defaultTheme="system" enableSystem>
-        <div>
-          <Header/>
-          <main>
-            {children}
-          </main>
-        </div>
-      </Providers>
+        <Providers attribute="class" defaultTheme="system" enableSystem>
+          <ClientLayout>{children}</ClientLayout>
+        </Providers>
       </body>
     </html>
   );

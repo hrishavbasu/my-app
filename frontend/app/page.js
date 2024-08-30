@@ -3,7 +3,9 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   Search,
   Settings,
+  User,
 } from "lucide-react";
+import { SignIn } from "@/components/SignIn";
 
 // Custom hook for Intersection Observer
 const useIntersectionObserver = (options) => {
@@ -97,6 +99,7 @@ const CollectionDashboard = () => {
     { name: "Food", level: "Pre-intermediate", words: 96, progress: 100 },
     { name: "Music", level: "Intermediate", words: 52, progress: 92 },
   ];
+
 
   return (
     <div className="font-sans min-h-screen transition-colors duration-300 bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
