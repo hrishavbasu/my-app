@@ -5,7 +5,6 @@ import {
   Settings,
   User,
 } from "lucide-react";
-import { SignIn } from "@/components/SignIn";
 
 // Custom hook for Intersection Observer
 const useIntersectionObserver = (options) => {

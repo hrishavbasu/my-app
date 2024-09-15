@@ -1,14 +1,17 @@
-'use client';
-
 import React, { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { useToast } from "@/components/hooks/use-toast"
 
 export function SignIn({ isOpen, onClose }) {
-  const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     username: ''
   });
+  const { toast } = useToast()
 
   if (!isOpen) return null;
 
@@ -16,91 +19,103 @@ export function SignIn({ isOpen, onClose }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e, mode) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    console.log(`${mode} form submitted:`, formData);
     // Add your authentication logic here
+    
+    // Show success toast
+    toast({
+      title: mode === 'signin' ? "Signed In Successfully" : "Signed Up Successfully",
+      description: `Welcome${mode === 'signup' ? ' to our platform' : ''}!`,
+      duration: 3000,
+    })
+    
     onClose(); // Close the modal after submission
   };
 
-  const toggleMode = () => {
-    setIsLogin(!isLogin);
-    setFormData({ email: '', password: '', username: '' });
-  };
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-md w-full">
-        <h2 className="text-2xl font-bold mb-6 text-center">
-          {isLogin ? 'Login' : 'Sign Up'}
-        </h2>
-        <form onSubmit={handleSubmit}>
-          {!isLogin && (
-            <div className="mb-4">
-              <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="username">
-                Username
-              </label>
-              <input
-                type="text"
-                id="username"
-                name="username"
-                value={formData.username}
-                onChange={handleInputChange}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 dark:bg-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                required
-              />
-            </div>
-          )}
-          <div className="mb-4">
-            <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="email">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 dark:bg-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-          </div>
-          <div className="mb-6">
-            <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" htmlFor="password">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 dark:bg-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-              required
-            />
-          </div>
-          <div className="flex items-center justify-between">
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
-              {isLogin ? 'Login' : 'Sign Up'}
-            </button>
-            <button
-              type="button"
-              onClick={toggleMode}
-              className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-            >
-              {isLogin ? 'Need an account? Sign Up' : 'Have an account? Login'}
-            </button>
-          </div>
-        </form>
-        <button
-          onClick={onClose}
-          className="mt-4 w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-        >
+    <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex justify-center items-center z-50">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-md w-full shadow-lg">
+        <Tabs defaultValue="signin" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="signin">Sign In</TabsTrigger>
+            <TabsTrigger value="signup">Sign Up</TabsTrigger>
+          </TabsList>
+          <TabsContent value="signin">
+            <form onSubmit={(e) => handleSubmit(e, 'signin')} className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="signin-email">Email</Label>
+                <Input
+                  id="signin-email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  className="dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signin-password">Password</Label>
+                <Input
+                  id="signin-password"
+                  name="password"
+                  type="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
+                  className="dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+              <Button type="submit" className="w-full">Sign In</Button>
+            </form>
+          </TabsContent>
+          <TabsContent value="signup">
+            <form onSubmit={(e) => handleSubmit(e, 'signup')} className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="signup-username">Username</Label>
+                <Input
+                  id="signup-username"
+                  name="username"
+                  type="text"
+                  value={formData.username}
+                  onChange={handleInputChange}
+                  required
+                  className="dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signup-email">Email</Label>
+                <Input
+                  id="signup-email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                  className="dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signup-password">Password</Label>
+                <Input
+                  id="signup-password"
+                  name="password"
+                  type="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
+                  className="dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+              <Button type="submit" className="w-full">Sign Up</Button>
+            </form>
+          </TabsContent>
+        </Tabs>
+        <Button onClick={onClose} variant="outline" className="w-full mt-6">
           Close
-        </button>
+        </Button>
       </div>
     </div>
   );

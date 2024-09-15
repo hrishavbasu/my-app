@@ -59,6 +59,7 @@ export function Header({ isMenuOpen, toggleMenu, openSignInModal }) {
             <NavLink href="/" icon={Home}>Home</NavLink>
             <NavLink href="/chat" icon={MessageCircle}>Chat</NavLink>
             <NavLink href="/feed" icon={Rss}>Feed</NavLink>
+            <NavLink href="/travel" icon={Rss}>travel form</NavLink>
             <NavLink href="/profile" icon={User} onClick={handleProfileClick}>Profile</NavLink>
             <ThemeToggle />
           </div>
